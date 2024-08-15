@@ -1,33 +1,31 @@
 import ProductList from "@/components/ProductList";
 import SearchForm from "@/components/SearchForm";
-import styles from "@/styles/Home.module.css";
 import { ProductType } from "@/types/products";
-import Link from "next/link";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import axios from "@/lib/axios";
-import Head from "next/head";
 
-export default function Home() {
+export default function Search() {
+  const router = useRouter();
+  const { q } = router.query;
+
   const [products, setProducts] = useState<ProductType[]>();
 
-  async function getProducts() {
-    const res = await axios.get(`/products`);
+  async function getProducts(query: string) {
+    const res = await axios.get(`/products?q=${query}`);
     const nextProducts = res.data.results as ProductType[];
     setProducts(nextProducts);
   }
 
   useEffect(() => {
-    getProducts();
-  }, []);
+    getProducts(q as string);
+  }, [q]);
 
   return (
     <>
-      <Head>
-        <title>타이틀</title>
-      </Head>
-      <h1>Codeitmall</h1>
-      <SearchForm />
-
+      <h1>search Component</h1>
+      <SearchForm initialValue={q as string} />
+      <h2> {q} 검색 결과 </h2>
       <ProductList products={products} />
     </>
   );
