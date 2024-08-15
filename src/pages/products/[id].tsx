@@ -6,18 +6,42 @@ import SizeReviewList from "@/components/SizeReciewList";
 import Image from "next/image";
 import styles from "@/styles/Product.module.css";
 import StarRating from "@/components/StarRating";
+import { GetStaticPropsContext } from "next";
 
-export default function Product() {
-  const [product, setProduct] = useState<ProductType>();
+// 다이나믹경로에서 정적 생성할 path를 지정
+export async function getStaticPaths() {
+  return {
+    paths: [{ params: { id: "1" } }, { params: { id: "2" } }],
+
+    fallback: false, //정적 생성하지 않은 경로로 접근했을 때 fallback 할 것인가
+    // true로 하면, 지정하지 않은 경로로 접근하면 getStaticProps를 실행하느라 로딩이 걸림
+  };
+}
+
+// pre-rendering : 정적 생성
+export async function getStaticProps(context: GetStaticPropsContext) {
+  const productId = context.params!["id"];
+
+  let product: ProductType | null = null;
+  try {
+    const res = await axios.get(`/products/${productId}`);
+    product = res.data as ProductType;
+  } catch (e) {
+    return {
+      notFound: true, // 존재하지 않는 상품의 경우 404 페이지로 이동
+    };
+  }
+  return {
+    props: {
+      product,
+    },
+  };
+}
+
+export default function Product({ product }: { product: ProductType }) {
   const [sizeReviews, setSizeReviews] = useState<SizeReviewType[]>([]);
   const router = useRouter();
   const { id } = router.query;
-
-  async function getProduct(targetId: string) {
-    const res = await axios.get(`/products/${targetId}`);
-    const nextProduct = res.data as ProductType;
-    setProduct(nextProduct);
-  }
 
   async function getSizeReviews(targetId: string) {
     const res = await axios.get(`/size_reviews/?product_id=${targetId}`);
@@ -28,11 +52,10 @@ export default function Product() {
   useEffect(() => {
     if (!id) return;
 
-    getProduct(id as string);
     getSizeReviews(id as string);
   }, [id]);
 
-  if (!product) return null;
+  if (!product) return <h1>로딩...</h1>;
 
   return (
     <>
