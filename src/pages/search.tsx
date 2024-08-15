@@ -4,23 +4,30 @@ import { ProductType } from "@/types/products";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import axios from "@/lib/axios";
+import { GetServerSidePropsContext } from "next";
 
-export default function Search() {
-  const router = useRouter();
-  const { q } = router.query;
+// pre-rendering : Server side rendering
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const q = context.query["q"];
 
-  const [products, setProducts] = useState<ProductType[]>();
+  const res = await axios.get(`/products?q=${q}`);
+  const products = res.data.results as ProductType[];
 
-  async function getProducts(query: string) {
-    const res = await axios.get(`/products?q=${query}`);
-    const nextProducts = res.data.results as ProductType[];
-    setProducts(nextProducts);
-  }
+  return {
+    props: {
+      products,
+      q,
+    },
+  };
+}
 
-  useEffect(() => {
-    getProducts(q as string);
-  }, [q]);
-
+export default function Search({
+  q,
+  products,
+}: {
+  q: string;
+  products: ProductType[];
+}) {
   return (
     <>
       <h1>search Component</h1>
