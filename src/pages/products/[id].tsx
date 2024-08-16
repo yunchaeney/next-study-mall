@@ -1,19 +1,25 @@
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import axios from "@/lib/axios";
-import { ProductType, SizeReviewType } from "@/types/products";
-import SizeReviewList from "@/components/SizeReciewList";
-import Image from "next/image";
-import styles from "@/styles/Product.module.css";
-import StarRating from "@/components/StarRating";
 import { GetStaticPropsContext } from "next";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import Image from "next/image";
+import { ProductType, SizeReviewType } from "@/types/products";
+import axios from "@/lib/axios";
+import StarRating from "@/components/StarRating";
+import SizeReviewList from "@/components/SizeReviewList/SizeReviewList";
+import SizeReviewForm from "@/components/SizeReviewForm/SizeReviewForm";
+import styles from "@/styles/Product.module.scss";
+import Dropdown from "@/components/Dropdown/Dropdown";
 
 // 다이나믹경로에서 정적 생성할 path를 지정
 export async function getStaticPaths() {
-  return {
-    paths: [{ params: { id: "1" } }, { params: { id: "2" } }],
+  const res = await axios.get("/products/");
+  const products = res.data.results as ProductType[];
+  const paths = products.map((product) => ({
+    params: { id: String(product.id) },
+  }));
 
-    fallback: false, //정적 생성하지 않은 경로로 접근했을 때 fallback 할 것인가
+  return {
+    paths,
+    fallback: true, //정적 생성하지 않은 경로로 접근했을 때 fallback 할 것인가
     // true로 하면, 지정하지 않은 경로로 접근하면 getStaticProps를 실행하느라 로딩이 걸림
   };
 }
@@ -33,93 +39,120 @@ export async function getStaticProps(context: GetStaticPropsContext) {
   }
   return {
     props: {
+      productId,
       product,
     },
   };
 }
 
-export default function Product({ product }: { product: ProductType }) {
+export default function Product({
+  productId,
+  product,
+}: {
+  productId: string;
+  product: ProductType;
+}) {
   const [sizeReviews, setSizeReviews] = useState<SizeReviewType[]>([]);
-  const router = useRouter();
-  const { id } = router.query;
 
+  // 사이즈 리뷰 가져오기
   async function getSizeReviews(targetId: string) {
     const res = await axios.get(`/size_reviews/?product_id=${targetId}`);
     const nextSizeReviews = res.data.results as SizeReviewType[];
     setSizeReviews(nextSizeReviews);
   }
 
-  useEffect(() => {
-    if (!id) return;
+  // const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   const sizeReview = {
+  //     ...formValue,
+  //     productId: product.id,
+  //   };
+  //   const response = await axios.post("/size_reviews/", sizeReview);
+  //   const newSizeReview = response.data;
+  //   setSizeReviews((prevSizereviews) => [newSizeReview, ...prevSizereviews]);
+  // };
 
-    getSizeReviews(id as string);
-  }, [id]);
+  useEffect(() => {
+    if (!productId) return;
+
+    getSizeReviews(productId);
+  }, [productId]);
 
   if (!product) return <h1>로딩...</h1>;
 
   return (
     <>
+      {/* 이름 */}
       <h1 className={styles.name}>
         {product.name}
         <span className={styles.englishName}>{product.englishName}</span>
       </h1>
-      <div className={styles.content}>
+      {/* 제품 정보 */}
+      <div className={styles.section}>
+        {/* 이미지 */}
         <div className={styles.image}>
           <Image fill src={product.imgUrl} alt={product.name} />
         </div>
         <div>
-          <section className={styles.section}>
-            <h2 className={styles.sectionTitle}>제품 정보</h2>
-            <div className={styles.info}>
-              <table className={styles.infoTable}>
-                <tbody>
-                  <tr>
-                    <th>브랜드 / 품번</th>
-                    <td>
-                      {product.brand} / {product.productCode}
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>제품명</th>
-                    <td>{product.name}</td>
-                  </tr>
-                  <tr>
-                    <th>가격</th>
-                    <td>
-                      <span className={styles.salePrice}>
-                        {product.price.toLocaleString()}원
-                      </span>{" "}
-                      {product.salePrice.toLocaleString()}원
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>포인트 적립</th>
-                    <td>{product.point.toLocaleString()}</td>
-                  </tr>
-                  <tr>
-                    <th>구매 후기</th>
-                    <td className={styles.starRating}>
-                      <StarRating value={product.starRating} />{" "}
-                      {product.starRatingCount.toLocaleString()}
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>좋아요</th>
-                    <td className={styles.like}>
-                      ♥{product.likeCount.toLocaleString()}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </section>
-          <section className={styles.section}>
-            <h2 className={styles.sectionTitle}>사이즈 추천</h2>
+          <h3 className={styles.title}>제품 정보</h3>
+          <div className={styles.content}>
+            <table className={styles.infoTable}>
+              <tbody>
+                <tr>
+                  <th>브랜드 / 품번</th>
+                  <td>
+                    {product.brand} / {product.productCode}
+                  </td>
+                </tr>
+                <tr>
+                  <th>제품명</th>
+                  <td>{product.name}</td>
+                </tr>
+                <tr>
+                  <th>가격</th>
+                  <td>
+                    <span className={styles.originalPrice}>
+                      {product.price.toLocaleString()}원
+                    </span>{" "}
+                    {product.salePrice.toLocaleString()}원
+                  </td>
+                </tr>
+                <tr>
+                  <th>포인트 적립</th>
+                  <td>{product.point.toLocaleString()}</td>
+                </tr>
+                <tr>
+                  <th>구매 후기</th>
+                  <td className={styles.starRating}>
+                    <StarRating value={product.starRating} />{" "}
+                    {product.starRatingCount.toLocaleString()}
+                  </td>
+                </tr>
+                <tr>
+                  <th>좋아요</th>
+                  <td className={styles.like}>
+                    ♥{product.likeCount.toLocaleString()}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      {/* 사이즈 리뷰 및 추천 */}
+      <div className={styles.section}>
+        <div>
+          <h3 className={styles.title}>사이즈 추천</h3>
+          <div className={styles.content}>
             <SizeReviewList sizeReviews={sizeReviews ?? []} />
-          </section>
-          <section className={styles.section}>
-            <h2 className={styles.sectionTitle}>사이즈 추천하기</h2>
-          </section>
+          </div>
+        </div>
+
+        <div>
+          <h3 className={styles.title}>사이즈 추천하기</h3>
+          <div className={styles.content}>
+            <SizeReviewForm />
+          </div>
         </div>
       </div>
     </>

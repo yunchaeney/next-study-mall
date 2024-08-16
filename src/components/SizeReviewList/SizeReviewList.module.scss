@@ -1,0 +1,40 @@
+@import "variables";
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 16px;
+  row-gap: 8px;
+  column-gap: 32px;
+
+  li {
+    width: calc(50% - 16px);
+    list-style: none;
+    padding: 8px;
+  }
+}
+
+.flex {
+  display: flex;
+  justify-content: space-between;
+}
+
+.fitText {
+  font-weight: 600;
+  color: lighten($primary-color, 20%);
+
+  :global(.light) & {
+    color: lighten($primary-color, 10%);
+  }
+}
+
+.date {
+  margin-top: 6px;
+  font-size: 14px;
+  color: darken($dark-text-color, 30%);
+
+  :global(.light) & {
+    color: lighten($light-text-color, 40%);
+  }
+}

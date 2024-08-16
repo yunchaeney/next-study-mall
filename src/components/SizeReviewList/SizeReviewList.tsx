@@ -1,4 +1,5 @@
 import { SizeReviewType } from "@/types/products";
+import styles from "./SizeReviewList.module.scss";
 
 function formatDate(date: Date) {
   const MM = String(date.getUTCMonth() + 1).padStart(2, "0");
@@ -27,17 +28,21 @@ export default function SizeReviewList({
   sizeReviews: SizeReviewType[];
 }) {
   return (
-    <ul>
+    <ul className={styles.list}>
       {sizeReviews.map((sizeReview) => (
         <li key={sizeReview.id}>
-          <div>
-            <div>{formatDate(new Date(sizeReview.createdAt))}</div>
+          <div className={styles.flex}>
             <div>
               ({labels.sex[sizeReview.sex]} {sizeReview.height}cm 기준){" "}
               {sizeReview.size}
             </div>
+
+            <div className={styles.fitText}>{labels.fit[sizeReview.fit]}</div>
           </div>
-          <div>{labels.fit[sizeReview.fit]}</div>
+
+          <div className={styles.date}>
+            {formatDate(new Date(sizeReview.createdAt))}
+          </div>
         </li>
       ))}
     </ul>

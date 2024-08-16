@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import { ChangeEvent, FormEvent, useState } from "react";
+import styles from "./SearchForm.module.scss";
 
 export default function SearchForm({
   initialValue = "",
@@ -8,7 +9,7 @@ export default function SearchForm({
 }) {
   const router = useRouter();
 
-  const [value, setValue] = useState<string>("");
+  const [value, setValue] = useState<string>(initialValue);
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     setValue(e.target.value);
@@ -25,9 +26,15 @@ export default function SearchForm({
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input name="q" value={value} onChange={handleChange} />
-      <button>검색</button>
+    <form className={styles.searchForm} onSubmit={handleSubmit}>
+      <input
+        className={styles.searchInput}
+        name="q"
+        value={value}
+        placeholder="ex) 후디"
+        onChange={handleChange}
+      />
+      <button className={styles.searchButton}>검색</button>
     </form>
   );
 }

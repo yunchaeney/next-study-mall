@@ -7,7 +7,7 @@ export default function Document() {
   return (
     <Html lang="ko">
       <Head />
-      <body>
+      <body className="dark">
         <Main />
         <NextScript />
       </body>

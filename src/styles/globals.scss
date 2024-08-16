@@ -3,6 +3,7 @@
 
 * {
   box-sizing: border-box;
+  --bg-color: #121212;
 }
 
 body {
@@ -10,12 +11,23 @@ body {
   font-size: 16px;
 }
 
+input,
+button,
+select,
+textarea {
+  font: inherit;
+}
+
 body.dark {
   @include theme($dark-bg-color, $dark-text-color);
+  --bg-color: $dark-bg-color;
+  --text-color: $dark-text-color;
 }
 
 body.light {
   @include theme($light-bg-color, $light-text-color);
+  --bg-color: $light-bg-color;
+  --text-color: $light-text-color;
 }
 
 .container {

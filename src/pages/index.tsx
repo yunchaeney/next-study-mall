@@ -1,11 +1,7 @@
-import ProductList from "@/components/ProductList";
-import SearchForm from "@/components/SearchForm";
-import styles from "@/styles/Home.module.css";
+import SearchForm from "@/components/SearchForm/SearchForm";
 import { ProductType } from "@/types/products";
-import Link from "next/link";
-import { useEffect, useState } from "react";
 import axios from "@/lib/axios";
-import Head from "next/head";
+import ProductList from "@/components/ProductList/ProductList";
 
 // 정적 생성
 // 빌드를 하는 시점에서 데이터를 불러옴
@@ -23,10 +19,6 @@ export async function getStaticProps() {
 export default function Home({ products }: { products: ProductType[] }) {
   return (
     <>
-      <Head>
-        <title>타이틀</title>
-      </Head>
-      <h1>Codeitmall</h1>
       <SearchForm />
 
       <ProductList products={products} />
