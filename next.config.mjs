@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
+import path from "path";
+
 const nextConfig = {
   reactStrictMode: true,
 
@@ -21,6 +23,10 @@ const nextConfig = {
         pathname: "/codeitmall/**",
       },
     ],
+  },
+
+  sassOptions: {
+    includePaths: [path.join(process.cwd(), "src", "styles")],
   },
 };
 
