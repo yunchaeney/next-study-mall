@@ -4,6 +4,7 @@ import Head from "next/head";
 import { Noto_Sans_KR } from "next/font/google";
 import "@/styles/globals.scss";
 import Header from "@/components/Header/Header";
+import { CartProvider } from "@/lib/CartContext";
 
 const notoSansKR = Noto_Sans_KR({
   weight: ["400", "700"],
@@ -21,12 +22,14 @@ export default function App({ Component, pageProps }: AppProps) {
       </Head>
 
       <ThemeProvider>
-        <div className={`${notoSansKR.className} container`}>
-          <Header />
-          <section>
-            <Component {...pageProps} />
-          </section>
-        </div>
+        <CartProvider>
+          <div className={`${notoSansKR.className} container`}>
+            <Header />
+            <section>
+              <Component {...pageProps} />
+            </section>
+          </div>
+        </CartProvider>
       </ThemeProvider>
     </>
   );

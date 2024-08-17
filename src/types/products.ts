@@ -25,3 +25,9 @@ export interface SizeReviewType {
   createdAt: number;
   updatedAt: number;
 }
+
+export interface CartItem {
+  productId: number;
+  size: string;
+  pcs: number;
+}

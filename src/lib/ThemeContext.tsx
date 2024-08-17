@@ -17,15 +17,22 @@ export const ThemeContext = createContext<ThemeContextType>({
 });
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  // 새로고침 및 url 직접 접근 시에도 테마를 유지하려면 로컬스토리지나 세션스토리지에 저장해서 사용해야 함
-  const [theme, setTheme] = useState("dark");
+  const [theme, setTheme] = useState(""); // 기본값을 "dark"로 설정
 
   useEffect(() => {
+    const savedTheme = sessionStorage.getItem("theme");
+
+    if (savedTheme) {
+      setTheme(savedTheme);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!theme) return;
+    document.body.classList.remove("light", "dark");
     document.body.classList.add(theme);
 
-    return () => {
-      document.body.classList.remove(theme);
-    };
+    sessionStorage.setItem("theme", theme);
   }, [theme]);
 
   return (

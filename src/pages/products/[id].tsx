@@ -7,6 +7,7 @@ import StarRating from "@/components/StarRating";
 import SizeReviewList from "@/components/SizeReviewList/SizeReviewList";
 import SizeReviewForm from "@/components/SizeReviewForm/SizeReviewForm";
 import styles from "@/styles/Product.module.scss";
+import AddCart from "@/components/AddCart/AddCart";
 
 type PartialSizeReview = Pick<
   SizeReviewType,
@@ -139,6 +140,12 @@ export default function Product({
                 </tr>
               </tbody>
             </table>
+          </div>
+          <div className={styles.addCart}>
+            <h3 className={styles.title}>장바구니 담기</h3>
+            <div className={styles.content}>
+              <AddCart productId={product.id} />
+            </div>
           </div>
         </div>
       </div>
