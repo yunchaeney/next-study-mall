@@ -38,3 +38,13 @@
     color: lighten($light-text-color, 40%);
   }
 }
+
+.notReciews {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  p {
+    margin: 40px 0;
+  }
+}

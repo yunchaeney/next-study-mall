@@ -27,6 +27,13 @@ export default function SizeReviewList({
 }: {
   sizeReviews: SizeReviewType[];
 }) {
+  if (sizeReviews.length < 1) {
+    return (
+      <div className={styles.notReciews}>
+        <p>작성된 사이즈 리뷰가 없습니다. </p>
+      </div>
+    );
+  }
   return (
     <ul className={styles.list}>
       {sizeReviews.map((sizeReview) => (

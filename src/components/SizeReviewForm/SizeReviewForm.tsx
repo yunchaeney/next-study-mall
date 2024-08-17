@@ -1,9 +1,19 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import Dropdown from "../Dropdown/Dropdown";
 import styles from "./SizeReviewForm.module.scss";
+import { SizeReviewType } from "@/types/products";
 
-export default function SizeReviewForm() {
-  const [formValue, setFromValue] = useState({
+type PartialSizeReview = Pick<
+  SizeReviewType,
+  "size" | "sex" | "height" | "fit"
+>;
+
+export default function SizeReviewForm({
+  handleSubmit,
+}: {
+  handleSubmit: (value: PartialSizeReview) => void;
+}) {
+  const [formValue, setFromValue] = useState<PartialSizeReview>({
     size: "M",
     sex: "male",
     height: 173,
@@ -22,12 +32,15 @@ export default function SizeReviewForm() {
     });
   };
 
+  const handleButtonClick = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    handleSubmit(formValue);
+  };
+
   return (
     <>
-      <form
-        className={styles.sizeForm}
-        // onSubmit={handleSubmit}
-      >
+      <form className={styles.sizeForm} onSubmit={handleButtonClick}>
         <label className={styles.label}>
           사이즈
           <Dropdown

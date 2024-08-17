@@ -7,7 +7,11 @@ import StarRating from "@/components/StarRating";
 import SizeReviewList from "@/components/SizeReviewList/SizeReviewList";
 import SizeReviewForm from "@/components/SizeReviewForm/SizeReviewForm";
 import styles from "@/styles/Product.module.scss";
-import Dropdown from "@/components/Dropdown/Dropdown";
+
+type PartialSizeReview = Pick<
+  SizeReviewType,
+  "size" | "sex" | "height" | "fit"
+>;
 
 // 다이나믹경로에서 정적 생성할 path를 지정
 export async function getStaticPaths() {
@@ -61,16 +65,15 @@ export default function Product({
     setSizeReviews(nextSizeReviews);
   }
 
-  // const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   const sizeReview = {
-  //     ...formValue,
-  //     productId: product.id,
-  //   };
-  //   const response = await axios.post("/size_reviews/", sizeReview);
-  //   const newSizeReview = response.data;
-  //   setSizeReviews((prevSizereviews) => [newSizeReview, ...prevSizereviews]);
-  // };
+  const handleSubmit = async (formValue: PartialSizeReview) => {
+    const sizeReview = {
+      ...formValue,
+      productId: product.id,
+    };
+    const response = await axios.post("/size_reviews/", sizeReview);
+    const newSizeReview = response.data;
+    setSizeReviews((prevSizereviews) => [newSizeReview, ...prevSizereviews]);
+  };
 
   useEffect(() => {
     if (!productId) return;
@@ -144,14 +147,14 @@ export default function Product({
         <div>
           <h3 className={styles.title}>사이즈 추천</h3>
           <div className={styles.content}>
-            <SizeReviewList sizeReviews={sizeReviews ?? []} />
+            <SizeReviewList sizeReviews={sizeReviews} />
           </div>
         </div>
 
         <div>
           <h3 className={styles.title}>사이즈 추천하기</h3>
           <div className={styles.content}>
-            <SizeReviewForm />
+            <SizeReviewForm handleSubmit={handleSubmit} />
           </div>
         </div>
       </div>
