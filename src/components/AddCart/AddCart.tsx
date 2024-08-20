@@ -42,7 +42,10 @@ export default function AddCart({ productId }: { productId: number }) {
       (item) => item.productId === productId && item.size === addCartItem.size
     );
     if (existingItemIndex !== -1) {
-      cart[existingItemIndex].pcs += addCartItem.pcs;
+      const newCart = [...cart];
+      newCart[existingItemIndex].pcs += addCartItem.pcs;
+      setCart(newCart);
+      // cart[existingItemIndex].pcs += addCartItem.pcs;
     } else {
       //   // 새로운 상품 추가
       setCart([...cart, addCartItem]);

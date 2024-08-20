@@ -32,7 +32,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
   // cart 값이 바뀌면 그 내용을 로컬스토리지에 저장
   useEffect(() => {
     const cartJSON = JSON.stringify(cart);
-    localStorage.setItem("cart", cartJSON);
+
+    if (cart.length > 0) {
+      localStorage.setItem("cart", cartJSON);
+    }
   }, [cart]);
 
   return (

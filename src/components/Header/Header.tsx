@@ -22,6 +22,8 @@ export default function Header() {
   const handleChangeTheme = () => {
     setChecked((prev) => !prev);
 
+    console.log(theme);
+
     if (theme === "dark") setTheme("light");
     if (theme === "light") setTheme("dark");
   };

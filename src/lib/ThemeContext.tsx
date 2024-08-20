@@ -17,13 +17,15 @@ export const ThemeContext = createContext<ThemeContextType>({
 });
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setTheme] = useState(""); // 기본값을 "dark"로 설정
+  const [theme, setTheme] = useState("");
 
   useEffect(() => {
     const savedTheme = sessionStorage.getItem("theme");
 
     if (savedTheme) {
       setTheme(savedTheme);
+    } else {
+      setTheme("dark"); // 기본값을 "dark"로 설정
     }
   }, []);
 
