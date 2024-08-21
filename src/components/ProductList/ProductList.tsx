@@ -4,6 +4,7 @@ import { ProductType } from "@/types/products";
 import Image from "next/image";
 import StarRating from "../StarRating";
 import heartImage from "/public/heart.svg";
+import { useEffect } from "react";
 
 export default function ProductList({
   products = [],

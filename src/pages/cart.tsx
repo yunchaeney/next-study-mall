@@ -42,9 +42,7 @@ export default function Cart() {
     const newItems = cartItems.map((item) => {
       if (item.id === productId && item.size === size) {
         if (buttonType === "increase") {
-          console.log("뭐냐");
           item.pcs = item.pcs + 1;
-          console.log(item);
         } else {
           item.pcs = item.pcs - 1;
         }
@@ -181,7 +179,7 @@ export default function Cart() {
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
                       >
-                        <g stroke-width="0"></g>
+                        <g strokeWidth="0"></g>
                         <g strokeLinecap="round" strokeLinejoin="round"></g>
                         <g>
                           <path
@@ -227,7 +225,7 @@ export default function Cart() {
             </div>
           </>
         ) : (
-          <>비어잇음</>
+          <h2>장바구니가 비어 있습니다.</h2>
         )}
       </div>
     </>
