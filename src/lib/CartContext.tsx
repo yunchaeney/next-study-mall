@@ -33,9 +33,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const cartJSON = JSON.stringify(cart);
 
-    if (cart.length > 0) {
-      localStorage.setItem("cart", cartJSON);
-    }
+    localStorage.setItem("cart", cartJSON);
   }, [cart]);
 
   return (

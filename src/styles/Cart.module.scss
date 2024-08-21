@@ -36,6 +36,7 @@
   gap: 36px;
 
   & > li {
+    position: relative;
     width: 100%;
     display: flex;
     gap: 16px;
@@ -165,5 +166,49 @@
 
   & p {
     margin: 0;
+  }
+}
+
+.deleteBtn {
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  top: 8px;
+  right: 4px;
+  border: 0;
+  outline: 0;
+  background: 0;
+  cursor: pointer;
+  color: darken($dark-text-color, 50%);
+
+  &:hover {
+    color: $dark-text-color;
+  }
+
+  :global(.light) &:hover {
+    color: $light-text-color;
+  }
+
+  & svg {
+    transition: 0.2s;
+  }
+}
+
+.deleteAllBtn {
+  display: block;
+  margin: 32px 0 0;
+  padding: 8px;
+  outline: 0;
+  border: 0;
+  width: 100%;
+  background-color: $primary-color;
+  border-radius: 4px;
+  color: lighten($primary-color, 70%);
+  cursor: pointer;
+
+  &:hover {
+    background-color: darken($primary-color, 10%);
   }
 }
