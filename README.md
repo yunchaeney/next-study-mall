@@ -29,7 +29,7 @@ API를 활용하여 상품 리스트 및 상세 페이지를 노출, 상품에 �
 <br />
 
 ## 배포 
-링크 : [Vercel](next-study-mall.vercel.app)
+링크 : [Vercel](https://next-study-mall.vercel.app/)
 <br />
 <br />
 
