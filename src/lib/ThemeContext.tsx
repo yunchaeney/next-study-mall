@@ -25,7 +25,13 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     if (savedTheme) {
       setTheme(savedTheme);
     } else {
-      setTheme("dark"); // 기본값을 "dark"로 설정
+      // 사용자의 OS theme를 확인
+      const isBrowserDarkMode = window.matchMedia(
+        "(prefers-color-scheme: dark)"
+      ).matches;
+      let initTheme = isBrowserDarkMode ? "dark" : "light";
+
+      setTheme(initTheme);
     }
   }, []);
 
