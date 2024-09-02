@@ -5,6 +5,7 @@ import { Noto_Sans_KR } from "next/font/google";
 import "@/styles/globals.scss";
 import Header from "@/components/Header/Header";
 import { CartProvider } from "@/lib/CartContext";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const notoSansKR = Noto_Sans_KR({
   weight: ["400", "700"],
@@ -29,6 +30,7 @@ export default function App({ Component, pageProps }: AppProps) {
               <Component {...pageProps} />
             </section>
           </div>
+          <SpeedInsights />
         </CartProvider>
       </ThemeProvider>
     </>
